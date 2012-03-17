@@ -1,0 +1,23 @@
+#!/usr/bin/python
+
+import argparse
+from gmpy import mpf
+
+def process_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--buckets", "-b", dest = "buckets", type = mpf)
+    parser.add_argument("--keys_hashed", "-k", dest = "n_keys", type = mpf)
+    return parser.parse_args()
+
+def expected_collision(keys, hashspace):
+    keys = mpf(keys)
+    hashspace = mpf(hashspace)
+    return keys - hashspace + hashspace * (((hashspace - 1)/(hashspace)) ** keys)
+
+def main():
+    """docstring for main"""
+    args = process_args()
+    print(expected_collision(args.n_keys, args.buckets))
+
+if __name__ == '__main__':
+    main()
