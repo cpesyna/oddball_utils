@@ -1,0 +1,33 @@
+#!/usr/bin/python
+
+import argparse
+
+from random import random
+from sys import stdin, stdout
+
+def init():
+    parser = argparse.ArgumentParser(description="Subsample a data file")
+    # No default
+    parser.add_argument("--probability", "-p", type = float)
+
+    # Default
+    parser.add_argument("--headerlines", "-hl", type = int, default = 1)
+    parser.add_argument("--commentchar", "-cc", default = "")
+    parser.add_argument("--infile", "-in" , nargs="?", type=argparse.FileType("r"), default=stdin)
+    parser.add_argument("--outfile", "-out",  nargs="?", type=argparse.FileType("w"), default=stdout)
+    return parser.parse_args()
+
+def main():
+    """Used for sampling the rows of a file"""
+    args = init()
+    # TODO: cleaner way of doing this
+    assert args.probability > 1
+    args.probability = 1/args.probability
+    for index, item in enumerate(args.infile):
+        if index < args.headerlines:
+            args.outfile.write(item)
+        elif random() < args.probability:
+            args.outfile.write(item)
+
+if __name__ == '__main__':
+    main()
