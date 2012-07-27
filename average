@@ -1,0 +1,20 @@
+#!/usr/bin/python
+
+import argparse
+from sys import stdin
+
+def init():
+    parser = argparse.ArgumentParser(description="Subsample a data file")
+    parser.add_argument("--infile", "-in" , nargs="?", type=argparse.FileType("r"), default=stdin)
+    return parser.parse_args()
+
+def main():
+    """Computes average of a list of numbers from stdin"""
+    args = init()
+    tot = 0
+    for index, item in enumerate(args.infile):
+        tot += float(item)
+    print(tot/(index + 1))
+
+if __name__ == '__main__':
+    main()
